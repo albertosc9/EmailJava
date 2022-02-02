@@ -8,11 +8,15 @@ import java.security.InvalidParameterException;
 import java.util.Properties;
 import java.util.Scanner;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 
 public class Mail {
@@ -72,10 +76,25 @@ public class Mail {
         }
         contenedor.setSubject(asunto);
         contenedor.setText(mensaje);
-        contenedor.setFileName(ruta);
+        /*
+        MimeBodyPart messageBodyPart2 = new MimeBodyPart();  
+        
+        String filename = ruta;//change accordingly  
+        DataSource source = new FileDataSource(filename);  
+        messageBodyPart2.setDataHandler(new DataHandler(source));  
+        messageBodyPart2.setFileName(filename);
+        */  
+        DataHandler dh = new DataHandler(new FileDataSource(ruta));
+        contenedor.setDataHandler(dh);
+        contenedor.setFileName(dh.getName());
+        
+      //  contenedor.setFileName(dh.getName());  //
+
+        
         Transport t = sesion.getTransport("smtp");
         t.connect(user,password);
         t.sendMessage(contenedor, contenedor.getAllRecipients());
+        
 
     }
 
