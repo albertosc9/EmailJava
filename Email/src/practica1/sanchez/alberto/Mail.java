@@ -9,15 +9,17 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import javax.activation.DataHandler;
-import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 public class Mail {
 	
@@ -60,7 +62,7 @@ public class Mail {
     }
 
 
-    public void enviarEmail(String asunto, String mensaje, String[] correos,String ruta) throws MessagingException {
+    public void enviarEmail(String asunto, String mensaje,String []  ruta) throws MessagingException {
 
     	
     	System.out.println("introduce tu email");
@@ -69,26 +71,43 @@ public class Mail {
     	password=read.next();
     	
     	
+    	BodyPart texto = new MimeBodyPart();
+    	texto.setText(mensaje);
+
+    	MimeMultipart multiparte = new MimeMultipart();
+    	
+    	multiparte.addBodyPart(texto);
+    	
+    	for (int i = 0; i < ruta.length; i++) {
+    		BodyPart adjunto = new MimeBodyPart();
+    		FileDataSource archivo = new FileDataSource(ruta[i]);
+    		
+    		adjunto.setDataHandler(new DataHandler(archivo));
+    		adjunto.setFileName(archivo.getName());
+    		multiparte.addBodyPart(adjunto);
+    		
+		}
+    	
+    	
+    	
+    	
         MimeMessage contenedor = new MimeMessage(sesion);
         contenedor.setFrom(new InternetAddress(user));
-        for (int i = 0; i < correos.length; i++) {
-            contenedor.addRecipient(Message.RecipientType.TO, new InternetAddress(correos[i]));
+        
+        
+        System.out.println("introduce los correos separados por coma");
+        String correos = read.next();
+        
+        String [] array = correos.split(",");
+        
+        
+        
+        for (int i = 0; i < array.length; i++) {
+            contenedor.addRecipient(Message.RecipientType.TO, new InternetAddress(array[i]));
         }
         contenedor.setSubject(asunto);
-        contenedor.setText(mensaje);
-        /*
-        MimeBodyPart messageBodyPart2 = new MimeBodyPart();  
+        contenedor.setContent(multiparte);
         
-        String filename = ruta;//change accordingly  
-        DataSource source = new FileDataSource(filename);  
-        messageBodyPart2.setDataHandler(new DataHandler(source));  
-        messageBodyPart2.setFileName(filename);
-        */  
-        DataHandler dh = new DataHandler(new FileDataSource(ruta));
-        contenedor.setDataHandler(dh);
-        contenedor.setFileName(dh.getName());
-        
-      //  contenedor.setFileName(dh.getName());  //
 
         
         Transport t = sesion.getTransport("smtp");

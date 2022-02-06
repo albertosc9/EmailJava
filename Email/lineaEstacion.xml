@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+  <LineaEstacion>
+	<codigoLinea>1</codigoLinea>
+	<codigoEstacion>4</codigoEstacion>
+  <ordenM>1</ordenM>
+  </LineaEstacion>
+    <LineaEstacion>
+	<codigoLinea>2</codigoLinea>
+	<codigoEstacion>2</codigoEstacion>
+  <ordenM>3</ordenM>
+  </LineaEstacion>
