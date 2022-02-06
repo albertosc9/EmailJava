@@ -13,7 +13,6 @@ import javax.activation.FileDataSource;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -62,14 +61,10 @@ public class Mail {
     }
 
 
-    public void enviarEmail(String asunto, String mensaje,String []  ruta) throws MessagingException {
+    public void enviarEmail(String asunto, String mensaje,String[] destinatarios,String []  ruta) throws MessagingException {
 
     	
-    	System.out.println("introduce tu email");
-    	user = read.next();
-    	System.out.println("introduce tu contraseña");
-    	password=read.next();
-    	
+    
     	
     	BodyPart texto = new MimeBodyPart();
     	texto.setText(mensaje);
@@ -88,22 +83,12 @@ public class Mail {
     		
 		}
     	
-    	
-    	
-    	
+    
         MimeMessage contenedor = new MimeMessage(sesion);
         contenedor.setFrom(new InternetAddress(user));
         
-        
-        System.out.println("introduce los correos separados por coma");
-        String correos = read.next();
-        
-        String [] array = correos.split(",");
-        
-        
-        
-        for (int i = 0; i < array.length; i++) {
-            contenedor.addRecipient(Message.RecipientType.TO, new InternetAddress(array[i]));
+        for (int i = 0; i < destinatarios.length; i++) {
+            contenedor.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatarios[i]));
         }
         contenedor.setSubject(asunto);
         contenedor.setContent(multiparte);
