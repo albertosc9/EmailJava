@@ -34,7 +34,9 @@ public class Mail {
         this.prop = new Properties();
         loadConfig(ruta);
 
-        sesion = Session.getDefaultInstance(prop);
+        string papa = "hola";
+      
+       sesion = Session.getDefaultInstance(prop);
     }
 
     private void loadConfig(String ruta) throws InvalidParameterException, IOException {
