@@ -34,7 +34,7 @@ public class Mail {
         this.prop = new Properties();
         loadConfig(ruta);
 
-        string papa = "hola";
+        string papa = "hola me llamo Alberto";
       
        sesion = Session.getDefaultInstance(prop);
     }
